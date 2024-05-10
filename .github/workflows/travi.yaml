@@ -21,7 +21,6 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL'
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: https://github.com/NextGen-DX-Catalyst/demo-repository@v2
+      - name: Upload Trivy scan results to GitHub Security tab 
         with:
           sarif_file: 'trivy-results.sarif'
