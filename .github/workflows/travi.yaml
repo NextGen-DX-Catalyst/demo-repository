@@ -8,8 +8,6 @@ jobs:
     name: trivy-sec-scan
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
       - name: Run Trivy vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@master
         with:
@@ -19,4 +17,4 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github.com/NextGen-DX-Catalyst/demo-repository@v1
+        uses: github.com/NextGen-DX-Catalyst/demo-repository@v2
