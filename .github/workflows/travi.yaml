@@ -12,12 +12,12 @@ jobs:
     steps:
       - name: Build an image from Dockerfile
         run: |
-          docker build -t docker.io/NextGen-DX-Catalyst/demo:${{ github.sha }} .
+          docker build -t docker.io/nextgen-dx-catalyst/demo:${{ github.sha }} .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/NextGen-DX-Catalyst/demo:${{ github.sha }}'
+          image-ref: 'docker.io/nextgen-dx-catalyst/demo:${{ github.sha }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
 
