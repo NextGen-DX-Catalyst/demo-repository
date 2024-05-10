@@ -1,0 +1,18 @@
+name: trivy-scanning
+on:
+  push:
+    branches: [ "main" ]
+permissions: write-all
+jobs:
+  trivy-scanning-job:
+    name: trivy-sec-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Trivy vulnerability scanning
+        uses: aquasecurity/trivy-action@master
+        with: 
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
