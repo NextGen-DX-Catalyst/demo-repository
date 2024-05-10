@@ -1,8 +1,8 @@
 name: Docker login, push container image to ACR and scan container image using Trivy
 on:
-  workflow_run:
-    workflows: [ "Java CI with Maven" ]
-    types: [completed]
+  push:
+    branches:
+      - main
 env:
  IMAGE_NAME: assignments-base
 jobs:
