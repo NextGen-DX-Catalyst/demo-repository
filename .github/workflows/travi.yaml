@@ -1,13 +1,17 @@
 name: trivy-scanning
 on:
   push:
-    branches: [ "main" ]
-permissions: write-all
+    branches:
+      - main
+  pull_request:
 jobs:
-  trivy-scanning-job:
-    name: trivy-sec-scan
-    runs-on: ubuntu-latest
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Run Trivy vulnerability scanner in repo mode
         uses: aquasecurity/trivy-action@master
         with:
@@ -15,6 +19,9 @@ jobs:
           ignore-unfixed: true
           format: 'sarif'
           output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
+
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github.com/NextGen-DX-Catalyst/demo-repository@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
