@@ -21,7 +21,7 @@ jobs:
       
       with:
         push: true
-        tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:latest
+        images: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:latest
 
     - name: Run Trivy vulnerability scanning
       uses: aquasecurity/trivy-action@master
