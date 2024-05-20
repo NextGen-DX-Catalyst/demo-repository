@@ -1,9 +1,17 @@
 on: push 
 name: Find Secrets
+defaults:
+  run:
+    shell: bash
+    working-directory: ./scripts
 jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: max/secret-scan@master
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
           
