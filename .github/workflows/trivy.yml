@@ -1,23 +1,9 @@
-name: trivy-scanning
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-permissions: write-all
+on: push 
+name: Find Secrets
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-20.04
+  main:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL'
+      - uses: actions/checkout@v2
+      - uses: max/secret-scan@master
+          
