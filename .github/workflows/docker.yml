@@ -1,37 +1,38 @@
-name: Create and publish a Docker image
+name: Docker login, push container image to ACR and scan container image using Trivy
 on:
   push:
-    branches: 
+    branches:
       - main
+permissions:
+  contents: write
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+ REGISTRY: ghcr.io
+ IMAGE_NAME: assignments-base
 jobs:
-  build-and-push-image:
+  docker-login:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.PTOKEN_GITHUB }}
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+    - name: Log into registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.PTOKEN_GITHUB }}
+       
+    - name: Build and Push images 
+      uses: docker/build-push-action@v2
+      
+      with:
+        push: true
+        tags: latest
+        images: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}
+
+    - name: Run Trivy vulnerability scanning
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: '${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:latest'
+        format: 'table'
+        exit-code: '0'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
