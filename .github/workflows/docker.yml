@@ -6,6 +6,7 @@ on:
 env:
   REGISTRY: ghcr.io 
   IMAGE_NAME: assignments-base
+  IMAGE_TAG: latest
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -21,18 +22,18 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.PTOKEN_GITHUB }}
-          tag_with_sha: true
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v1
         with:
           images: ${{ env.IMAGE_NAME }}
-          
+          tag_with_sha: true
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v1
         with:
           context: .
+          tag_with_sha: true
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
