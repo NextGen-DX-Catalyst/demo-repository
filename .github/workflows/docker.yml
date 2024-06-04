@@ -36,7 +36,7 @@ jobs:
           tag_with_sha: true
           tag_with_ref: true
           add_git_labels: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: demoimage:latest 
           labels: ${{ steps.meta.outputs.labels }}
       - name: Run Trivy vulnerability scanning
         uses: aquasecurity/trivy-action@master
