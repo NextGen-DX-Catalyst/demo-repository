@@ -21,6 +21,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.PTOKEN_GITHUB }}
+          tag_with_sha: true
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v1
