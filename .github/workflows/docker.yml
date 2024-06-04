@@ -4,42 +4,44 @@ on:
     branches: 
       - main
 env:
-  REGISTRY: ghcr.io 
+  REGISTRY: ghcr.io
+  IMAGE_NAME: demoimage
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+      attestations: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Log in to the Container registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.PTOKEN_GITHUB }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v1
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
         id: push
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
-          tag_with_ref: true
-          tag_with_sha: true
-          add_git_labels: false
           push: true
+          tag_with_sha: false
+          tag_with_ref: false
+          add_git_labels: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Run Trivy vulnerability scanning
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${{ steps.meta.outputs.tags }}'
+          image-ref: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}'
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
