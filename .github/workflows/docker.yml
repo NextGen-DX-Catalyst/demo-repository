@@ -4,8 +4,8 @@ on:
     branches: 
       - main
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  REGISTRY: ghcr.io 
+  IMAGE_NAME: assignments-base
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -26,6 +26,7 @@ jobs:
         uses: docker/metadata-action@v1
         with:
           images: ${{ env.IMAGE_NAME }}
+          
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v1
