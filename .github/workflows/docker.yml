@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
-      attestations: write
+      packages: write 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,10 +32,7 @@ jobs:
         with:
           context: .
           push: true
-          tag_with_sha: true
-          tag_with_ref: true
-          add_git_labels: true
-          tags: demoimage:latest 
+          tags: demo:latest 
           labels: ${{ steps.meta.outputs.labels }}
       - name: Run Trivy vulnerability scanning
         uses: aquasecurity/trivy-action@master
