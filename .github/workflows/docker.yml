@@ -12,7 +12,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-      attestations: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,12 +23,12 @@ jobs:
           password: ${{ secrets.PTOKEN_GITHUB }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@${{steps.meta.outputs.labels.org.opencontainers.image.revision}}
+        uses: docker/metadata-action@v1
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
         id: push
-        uses: docker/build-push-action@${{steps.meta.outputs.labels.org.opencontainers.image.revision}}
+        uses: docker/build-push-action@v1
         with:
           context: .
           push: true
