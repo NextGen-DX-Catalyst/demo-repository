@@ -5,7 +5,7 @@ on:
       - main
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: demoimage
+  IMAGE_NAME: demo-repository
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -32,8 +32,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: demo:latest 
+          tags: demo-repository:latest 
           labels: ${{ steps.meta.outputs.labels }}
+          add_git_labels: true
       - name: Run Trivy vulnerability scanning
         uses: aquasecurity/trivy-action@master
         with:
