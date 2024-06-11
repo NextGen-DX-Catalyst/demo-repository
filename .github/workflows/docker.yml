@@ -29,7 +29,7 @@ jobs:
           context: .
           push: true
           tag_with_sha: true
-          tags:  tags: ghcr.io/nextgen-dx-catalyst/demo-repository:${{ github.sha }} 
+          tags: ghcr.io/nextgen-dx-catalyst/demo-repository:${{ github.sha }} 
           labels: ${{ steps.meta.outputs.labels }}
           add_git_labels: true
       - name: Run Trivy vulnerability scanning
