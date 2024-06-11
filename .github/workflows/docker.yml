@@ -35,7 +35,7 @@ jobs:
       - name: Run Trivy vulnerability scanning
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref:  tags: ghcr.io/nextgen-dx-catalyst/demo-repository:${{ github.sha }}
+          image-ref: ghcr.io/nextgen-dx-catalyst/demo-repository:${{ github.sha }}
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
