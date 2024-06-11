@@ -29,13 +29,13 @@ jobs:
           context: .
           push: true
           tag_with_sha: true
-          tags: ghcr.io/nextgen-dx-catalyst/demo-repository:${{ github.sha }} 
+          tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }} 
           labels: ${{ steps.meta.outputs.labels }}
           add_git_labels: true
       - name: Run Trivy vulnerability scanning
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ghcr.io/nextgen-dx-catalyst/demo-repository:${{ github.sha }}
+          image-ref: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
