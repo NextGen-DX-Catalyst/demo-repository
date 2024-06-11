@@ -1,48 +1,26 @@
-name: Create and publish a Docker image
+name: ghcr_test
 on:
   push:
-    branches: 
+    branches:
       - main
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: demo-repository
+
 jobs:
-  build-and-push-image:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write 
+      packages: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Login to GitHub Packages
+        uses: docker/login-action@v1
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.PTOKEN_GITHUB }}
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v2
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
-        id: push
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tag_with_sha: true
-          tags: demo-repository:latest 
-          labels: ${{ steps.meta.outputs.labels }}
-          add_git_labels: true
-      - name: Run Trivy vulnerability scanning
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}'
-          format: 'table'
-          exit-code: '0'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-    
+          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
